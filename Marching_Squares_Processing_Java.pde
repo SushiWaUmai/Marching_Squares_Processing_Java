@@ -80,7 +80,7 @@ void draw()
   drawCircles(0.3f);
   drawLines();
   
-  save("frame1.png");
+  // save("frame1.png");
 }
 
 void drawLines()
