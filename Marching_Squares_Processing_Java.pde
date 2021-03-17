@@ -18,6 +18,7 @@ float colorShift = 100;
 float xMoveSpeed = 0.01f;
 float yMoveSpeed = 0;
 
+
 Vector2Int[] positions = new Vector2Int[]
 {
   new Vector2Int( 0, 1),
@@ -79,8 +80,6 @@ void draw()
   drawGrid();
   drawCircles(0.3f);
   drawLines();
-  
-  // save("frame1.png");
 }
 
 void drawLines()
