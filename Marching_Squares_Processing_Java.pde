@@ -1,24 +1,37 @@
+// noise map
 float[][] heightMap;
 
+// width and height of the nodes
 int mapHeight = 50;
 int mapWidth = 50;
 
+// noise offset
 float xOffset = 0;
 float yOffset = 0;
 
+// noise scale
 float xScale = 10;
 float yScale = 10;
 
-float xCellSize;
-float yCellSize;
-
-float ratio = 0.6f;
-float colorShift = 100;
-
+// Noise Movement Speed
 float xMoveSpeed = 0.01f;
 float yMoveSpeed = 0;
 
+// node size in pixel
+float xCellSize;
+float yCellSize;
 
+// value between 0 and 1 that defines the position of the lines
+float ratio = 0.6f;
+
+// Colorshift of the hue color
+float colorShift = 100;
+
+float circleSize = 0.3f;
+
+color gridColor = color(64, 64, 64);
+
+// Node vertex positions
 Vector2Int[] positions = new Vector2Int[]
 {
   new Vector2Int( 0, 1),
@@ -27,6 +40,7 @@ Vector2Int[] positions = new Vector2Int[]
   new Vector2Int( 0, 0)
 };
 
+// connection position thanks to http://jamie-wong.com/2014/08/19/metaballs-and-marching-squares/
 Vector2Int[][][] indecies = new Vector2Int[][][]
 {
   new Vector2Int[][] {},
@@ -54,6 +68,17 @@ void setup()
   background(0);
 }
 
+void draw()
+{
+  clear();
+  xOffset += xMoveSpeed;
+  yOffset += yMoveSpeed;
+  initHeightMap();
+  drawGrid();
+  drawCircles(circleSize);
+  drawLines();
+}
+
 void initValues()
 {
   yCellSize =  (float)height / mapHeight;
@@ -70,18 +95,7 @@ PVector lerp(PVector a, PVector b, float t)
   return new PVector(lerp(a.x, b.x, t), lerp(a.y, b.y, t));
 }
 
-void draw()
-{
-  clear();
-  xOffset += xMoveSpeed;
-  yOffset += yMoveSpeed;
-  initHeightMap();
-  stroke(32);
-  drawGrid();
-  drawCircles(0.3f);
-  drawLines();
-}
-
+// Draws the lines between nodes
 void drawLines()
 {
   stroke(255);
@@ -98,6 +112,7 @@ void drawLines()
   stroke(255);
 }
 
+// gets the configuration based on the heightmap values
 int getConfiguration(float x, float y, float z, float w)
 {
   int digit1 = x > ratio ? 1 : 0;
@@ -108,6 +123,7 @@ int getConfiguration(float x, float y, float z, float w)
   return digit1 + digit2 * 2 + digit4 * 4 + digit8 * 8;
 }
 
+// draws the line of the configuration
 void drawConfiguration(int configuration, int x, int y)
 {
   Vector2Int[][] lines = indecies[configuration];
@@ -136,6 +152,7 @@ void drawConfiguration(int configuration, int x, int y)
   }
 }
 
+// draws the circles of the verteces of the nodes
 void drawCircles(float scale)
 {
   for(int x = 0; x < mapWidth; x++)
@@ -146,13 +163,15 @@ void drawCircles(float scale)
       // fill(heightMap[x][y] * 255);
       fill(grayToColor(heightMap[x][y]));
       PVector pos = gridToPixel(x, y);
-      rect(pos.x, pos.y, xCellSize * scale, yCellSize * scale);
+      ellipse(pos.x, pos.y, xCellSize * scale, yCellSize * scale);
     }
   }
 }
 
+// Draws a grid
 void drawGrid()
 {
+  stroke(gridColor);
   for(int x = 0; x < mapWidth - 1; x++)
   {
     for(int y = 0; y < mapHeight - 1; y++)
@@ -165,6 +184,7 @@ void drawGrid()
   }
 }
 
+// Converts grid index to pixel position
 PVector gridToPixel(PVector grid)
 {
   return new PVector(grid.x * xCellSize + xCellSize * 0.5f, grid.y * yCellSize + yCellSize * 0.5f);
@@ -175,6 +195,7 @@ PVector gridToPixel(int x, int y)
   return gridToPixel(new PVector(x, y));
 }
 
+// initialized heightmap with new noise values
 void initHeightMap()
 {
   heightMap =  new float[mapWidth][mapHeight];
@@ -189,6 +210,7 @@ void initHeightMap()
   }
 }
 
+// converts gray to hue color values
 color grayToColor(float val)
 {
   colorMode(HSB);
