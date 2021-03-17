@@ -13,7 +13,10 @@ float xCellSize;
 float yCellSize;
 
 float ratio = 0.6f;
-float colorShift = 50;
+float colorShift = 100;
+
+float xMoveSpeed = 0.01f;
+float yMoveSpeed = 0;
 
 Vector2Int[] positions = new Vector2Int[]
 {
@@ -69,13 +72,15 @@ PVector lerp(PVector a, PVector b, float t)
 void draw()
 {
   clear();
-  xOffset += 0.01f;
-  // yOffset += 0.01f;
+  xOffset += xMoveSpeed;
+  yOffset += yMoveSpeed;
   initHeightMap();
   stroke(32);
   drawGrid();
   drawCircles(0.3f);
   drawLines();
+  
+  save("frame1.png");
 }
 
 void drawLines()
