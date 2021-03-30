@@ -31,7 +31,6 @@ float circleSize = 0.3f;
 
 color gridColor = color(64, 64, 64);
 
-// Node vertex positions
 Vector2Int[] positions = new Vector2Int[]
 {
   new Vector2Int( 0, 1),
@@ -63,7 +62,7 @@ Vector2Int[][][] indecies = new Vector2Int[][][]
 
 void setup()
 {
-  size(750, 750);
+  size(2048, 2048);
   initValues();
   background(0);
 }
@@ -95,7 +94,6 @@ PVector lerp(PVector a, PVector b, float t)
   return new PVector(lerp(a.x, b.x, t), lerp(a.y, b.y, t));
 }
 
-// Draws the lines between nodes
 void drawLines()
 {
   stroke(255);
